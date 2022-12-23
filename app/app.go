@@ -3,17 +3,22 @@ package app
 import (
 	"log"
 	"net/http"
+
+	"github.com/Gustavo-Zamai/Banking-API/domain"
+	"github.com/Gustavo-Zamai/Banking-API/service"
 	"github.com/gorilla/mux"
 )
 
 func Start() {
 	//mux := http.NewServeMux()
 	router := mux.NewRouter()
+	
+	//Wiring
+	handlers := CustomerHandlers{service.NewCustomerService(domain.NewCustomerRepositoryStub())}
+
 	//Routes
-	router.HandleFunc("/greet", greet).Methods(http.MethodGet) 
-	router.HandleFunc("/customers", getAllCustomers).Methods(http.MethodGet)
-	router.HandleFunc("/customers", createCustomers).Methods(http.MethodPost)
-	router.HandleFunc("/customers/{customer_id:[0-9]+}", getCustomerById).Methods(http.MethodGet)
+	router.HandleFunc("/customers", handlers.getAllCustomers).Methods(http.MethodGet)
+
 	
 
 	//Start server
