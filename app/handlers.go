@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"net/http"
-
 	"github.com/Gustavo-Zamai/Banking-API/service"
 	//"fmt"
 	//"github.com/gorilla/mux"
