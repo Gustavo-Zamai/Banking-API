@@ -3,10 +3,10 @@ package app
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"net/http"
 	"github.com/Gustavo-Zamai/Banking-API/service"
-	//"fmt"
-	//"github.com/gorilla/mux"
+	"github.com/gorilla/mux"
 )
 
 type Customer struct {
@@ -20,11 +20,6 @@ type CustomerHandlers struct {
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	//customers := []Customer{
-	//{Name: "Gus", City: "Mococa", Zipcode: "13730000"},
-	//	{Name: "Joaozinho", City: "Campinas", Zipcode: "13735496"},
-	//}
-
 	customers, _ := ch.service.GetAllCustomer()
 
 	if r.Header.Get("Content-Type") == "application/xml" {
@@ -33,5 +28,20 @@ func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Reque
 	} else {
 		w.Header().Add("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(customers)
+	}
+}
+
+func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+    id := vars["customer_id"]
+
+    customer, err := ch.service.GetCustomer(id)
+
+    if err!= nil {
+        w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, err.Error())
+    }else{
+		w.Header().Add("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(customer)
 	}
 }
