@@ -14,7 +14,7 @@ type CustomerRepositoryDB struct {
 //open connection to database
 func (d CustomerRepositoryDB) FindAll() ([]Customer, error) {
 	//define sql to query into the database
-	findAllSql := "select * from customer"
+	findAllSql := "select * from customers"
 	rows, err := d.client.Query(findAllSql)
 	if err != nil {
 		log.Println("Error while querying customer table: " + err.Error())
